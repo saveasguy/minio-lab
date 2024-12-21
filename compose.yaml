@@ -1,0 +1,27 @@
+services:
+  minio:
+    build:
+      context: .
+      dockerfile: Dockerfile.minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: ["CMD-SHELL", "mc ready local"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    env_file:
+      - path: ./keys.env
+        required: true
+  uploader:
+    build:
+      context: .
+      dockerfile: Dockerfile.uploader
+    depends_on:
+      minio:
+        condition: service_healthy
+    env_file:
+      - path: ./keys.env
+        required: true
