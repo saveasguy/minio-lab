@@ -1,0 +1,18 @@
+FROM ubuntu:22.04
+
+WORKDIR root
+
+RUN apt update && apt install -y wget
+
+RUN wget https://dl.min.io/server/minio/release/linux-amd64/archive/minio_20241213221912.0.0_amd64.deb -O minio.deb &&\
+dpkg -i minio.deb
+
+RUN wget https://dl.min.io/client/mc/release/linux-amd64/mc &&\
+chmod +x mc && mv mc /usr/local/bin/mc
+
+EXPOSE 9000
+EXPOSE 9001
+
+COPY minio_setup.sh /root
+
+ENTRYPOINT ["./minio_setup.sh"]
