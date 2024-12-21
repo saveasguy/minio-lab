@@ -41,7 +41,6 @@ def main():
                 )
             except minio.error.S3Error as err:
                 print(f"{err.message} on {file.name}")
-                exit(1)
             time.sleep(0.5)
 
 
